@@ -4,7 +4,7 @@ python: 3.4
 cache: pip
 env:
   global:
-  - STACK_NAME=bridgepf
+  - STACK_NAME=bridge
 install:
 # install git-crypt
 - pushd /tmp
