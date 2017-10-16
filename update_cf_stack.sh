@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# double interpolate environment variables
+eval export "JacobianUserPassword=\$JacobianUserPassword_$TRAVIS_BRANCH"
+
 # deploy with evaluated vars
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
