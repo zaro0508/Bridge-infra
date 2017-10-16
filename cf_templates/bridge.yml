@@ -1,0 +1,19 @@
+Description: Setup infra resources for Bridge account
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  JacobianUserPassword:
+    Type: String
+    NoEcho: true
+Resources:
+  AWSIAMJacobianUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMAuditorsGroup
+      LoginProfile:
+        Password: !Ref JacobianUserPassword
+  AWSIAMAuditorsGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
