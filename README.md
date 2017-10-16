@@ -8,7 +8,7 @@ Install, configure and manage the Bridge AWS Infrastructure account.
 aws --profile aws-admin --region us-east-1 cloudformation create-stack \
   --stack-name bridge \
   --capabilities CAPABILITY_NAMED_IAM \
-  --template-body cf_templates/bridgepf.yml \
+  --template-body cf_templates/bridge.yml \
   --parameters \
   ParameterKey=JacobianUserPassword,ParameterValue=a_good_password \
   ..
