@@ -1,0 +1,36 @@
+#This template is used to bootstrap resources for an AWS account.
+#The resources in this template only need to be created once.
+#
+#Usage:
+#  aws --profile bridge.admin --region us-east-1 \
+#  cloudformation create-stack \
+#  --stack-name bootstrap \
+#  --on-failure DELETE \
+#  --capabilities CAPABILITY_NAMED_IAM \
+#  --template-body file://cf_templates/bootstrap.yml
+Description: Bootstrap resources for AWS account
+AWSTemplateFormatVersion: 2010-09-09
+Outputs:
+  AWSIAMTravisUserAccessKey:
+    Value: !Ref AWSIAMTravisUserAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-UserAccessKey'
+  AWSIAMTravisUserSecretAccessKey:
+    Value: !GetAtt AWSIAMTravisUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-SecretAccessKey'
+Resources:
+  AWSIAMTravisUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref AWSIAMTravisUser
+  AWSIAMTravisUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMCiGroup
+  AWSIAMCiGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/SystemAdministrator
