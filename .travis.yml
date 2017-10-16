@@ -15,8 +15,8 @@ install:
 - popd
 # get env vars
 - openssl aes-256-cbc -K $encrypted_01c81fac4a66_key -iv $encrypted_01c81fac4a66_iv -in git-crypt.key.enc -out git-crypt.key -d
-- /tmp/git-crypt-master/git-crypt unlock ./crypt-key
-- rm -rf crypt-key
+- /tmp/git-crypt-master/git-crypt unlock ./git-crypt.key
+- rm -rf git-crypt.key
 - source env_vars && source env_vars.secret
 - /tmp/git-crypt-master/git-crypt lock
 - ./interpolate_env_vars.sh
