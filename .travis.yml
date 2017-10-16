@@ -19,12 +19,7 @@ install:
 - rm -rf git-crypt.key
 - source env_vars && source env_vars.secret
 - /tmp/git-crypt-master/git-crypt lock
-- ./interpolate_env_vars.sh
 # install aws cli
-- pip install --upgrade awscli
-# configure aws cli
-- mkdir ~/.aws
-- echo -e "[default]\nregion=us-east-1" > ~/.aws/config
-- echo -e "[default]\naws_access_key_id=$TravisUserKey\naws_secret_access_key=$TravisUserSecretKey" > ~/.aws/credentials
+- ./setup_aws_cli.sh
 script:
 - ./deploy_infra.sh
