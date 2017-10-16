@@ -33,4 +33,4 @@ Resources:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/job-function/SystemAdministrator
+        - arn:aws:iam::aws:policy/AdministratorAccess
