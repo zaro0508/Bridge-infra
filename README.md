@@ -1,8 +1,8 @@
-# Bridge-infra
-Install, configure and manage the Bridge AWS Infrastructure account.
+# Overview
+Install, configure and manage the Bridge AWS account.
 
 
-## Bootstrap the account
+## Create resources
 
 ```
 aws --profile aws-admin --region us-east-1 cloudformation create-stack \
@@ -22,8 +22,8 @@ is configured you can run BridgePF-infra[2] template to setup BridgePF in the ac
 
 
 ## Continuous Integration
-The CF template is under CI and will be run by travis on every update of the template.  This automates the management
-of the account using CF.  Travis runs update_cf_stack.sh to manage the AWS account.
+We have configured Travis to deploy CF template updates.  Travis does this by running update_cf_stack.sh on every
+change.
 
 
 # Contributions
@@ -35,7 +35,7 @@ of the account using CF.  Travis runs update_cf_stack.sh to manage the AWS accou
 * https://travis-ci.org/Sage-Bionetworks/Bridge-infra
 
 ## Secrets
-* We use git-crypt[3] to hide secrets for Bridge-infra.  Access to secrets is tightly controlled.  You will be required to
+* We use git-crypt[3] to hide secrets.  Access to secrets is tightly controlled.  You will be required to
 have your own GPG key[4] and you must request access by a maintainer of this project.
 
 
