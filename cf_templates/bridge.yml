@@ -59,3 +59,39 @@ Resources:
       Path: /
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+  AWSSNSDynamoTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint: bridgeops@sagebase.org
+          Protocol: email
+  AWSCWDynmoGetRecordsErrorAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSDynamoTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      MetricName: SystemErrors
+      Namespace: AWS/DynamoDB
+      Dimensions:
+        -
+          "Name": "Operation"
+          "Value": "GetRecords"
+      Period: 900
+      Statistic: Maximum
+      Threshold: 1
+  AWSCWDynamoDashboard:
+    Type: 'AWS::CloudWatch::Dashboard'
+    Properties:
+      DashboardBody: !Join
+        - ''
+        - - >-
+            {"widgets": [
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6, "properties":
+            {"metrics":[
+            [ "AWS/DynamoDB", "SystemErrors", "Operation", "GetRecords", {"stat": "Sum"}]],
+            "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
+            "region":"us-east-1", "title":"DynamoErrors"}}]}
