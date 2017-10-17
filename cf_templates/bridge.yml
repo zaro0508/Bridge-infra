@@ -1,4 +1,4 @@
-Description: Setup infra resources for Bridge account
+Description: Setup common infra resources for AWS account
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   JacobianUserPassword:
