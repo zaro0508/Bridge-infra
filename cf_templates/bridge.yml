@@ -4,6 +4,12 @@ Parameters:
   JacobianUserPassword:
     Type: String
     NoEcho: true
+  NewRelicAccountId:
+    Type: String
+    NoEcho: true
+  NewRelicExternalId:
+    Type: String
+    NoEcho: true
 Resources:
   AWSIAMJacobianUser:
     Type: 'AWS::IAM::User'
@@ -17,3 +23,39 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
+  AWSIAMNewRelicBudgetPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "NewRelicBudgetPolicy"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "budgets:ViewBudget"
+            Resource: "*"
+      Roles:
+        -
+          Ref: AWSIAMNewRelicInfrastructureServiceRole
+  AWSIAMNewRelicInfrastructureServiceRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS:
+                - !Join
+                  - ''
+                  - - 'arn:aws:iam::'
+                    - !Ref NewRelicAccountId
+                    - ':root'
+            Action:
+              - 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                sts:ExternalId: !Ref NewRelicExternalId
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
