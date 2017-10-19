@@ -11,6 +11,24 @@ Parameters:
     Type: String
     NoEcho: true
 Resources:
+  JacobianAccessPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Deny
+            Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - codecommit:GetCommit
+            - codecommit:GitPull
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:GetRecords
+            - sqs:ReceiveMessage
+            - sdb:Select
+            Resource: "*"
   AWSIAMJacobianUser:
     Type: 'AWS::IAM::User'
     Properties:
@@ -23,6 +41,7 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - !Ref JacobianAccessPolicy
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
