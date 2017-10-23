@@ -11,14 +11,18 @@
 Description: Bootstrap resources for AWS account
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
+  AWSIAMTravisUser:
+    Value: !Ref AWSIAMTravisUser
+    Export:
+      Name: !Sub '${AWS::StackName}-TravisUser'
   AWSIAMTravisUserAccessKey:
     Value: !Ref AWSIAMTravisUserAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-UserAccessKey'
+      Name: !Sub '${AWS::StackName}-TravisUserAccessKey'
   AWSIAMTravisUserSecretAccessKey:
     Value: !GetAtt AWSIAMTravisUserAccessKey.SecretAccessKey
     Export:
-      Name: !Sub '${AWS::StackName}-SecretAccessKey'
+      Name: !Sub '${AWS::StackName}-TravisUserSecretAccessKey'
 Resources:
   AWSIAMTravisUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
