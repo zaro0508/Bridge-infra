@@ -66,8 +66,8 @@ Resources:
             Resource: !Join
               - ''
               - - 'arn:aws:iam::'
-                - !Ref 'AWS::AccountId'
-                - 'user/${aws:username}'
+                - !Ref AWS::AccountId
+                - ':user/${aws:username}'
           - Sid: AllowIndividualUserToListOnlyTheirOwnMFA
             Effect: Allow
             Action:
@@ -77,12 +77,12 @@ Resources:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                  - !Ref 'AWS::AccountId'
+                  - !Ref AWS::AccountId
                   - ':mfa/*'
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                  - !Ref 'AWS::AccountId'
+                  - !Ref AWS::AccountId
                   - ':user/${aws:username}'
           - Sid: AllowIndividualUserToManageTheirOwnMFA
             Effect: Allow
@@ -97,12 +97,12 @@ Resources:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                  - !Ref 'AWS::AccountId'
+                  - !Ref AWS::AccountId
                   - ':mfa/${aws:username}'
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                  - !Ref 'AWS::AccountId'
+                  - !Ref AWS::AccountId
                   - ':user/${aws:username}'
           - Sid: AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA
             Effect: Allow
@@ -112,12 +112,12 @@ Resources:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                  - !Ref 'AWS::AccountId'
+                  - !Ref AWS::AccountId
                   - ':mfa/${aws:username}'
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                  - !Ref 'AWS::AccountId'
+                  - !Ref AWS::AccountId
                   - ':user/${aws:username}'
             Condition:
               Bool:
