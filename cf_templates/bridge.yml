@@ -42,6 +42,7 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
         - !Ref JacobianAccessPolicy
+        - !ImportValue bootstrap-EnforceMfaPolicy
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
