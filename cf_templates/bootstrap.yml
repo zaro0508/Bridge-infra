@@ -143,4 +143,3 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AdministratorAccess
-        - !Ref AWSIAMEnforceMfaPolicy
