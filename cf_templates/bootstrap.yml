@@ -77,7 +77,7 @@ Resources:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
-                - !Ref 'AWS::AccountId'
+                  - !Ref 'AWS::AccountId'
                   - ':mfa/*'
               - !Join
                 - ''
