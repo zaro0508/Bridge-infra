@@ -1,6 +1,9 @@
 Description: Setup common infra resources for AWS account
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+  InitNewUserPassword:
+    Type: String
+    NoEcho: true
   JacobianUserPassword:
     Type: String
     NoEcho: true
@@ -11,6 +14,30 @@ Parameters:
     Type: String
     NoEcho: true
 Resources:
+  AWSIAMKhaiDoUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: khai.do@sagebase.org
+      Groups:
+        - !Ref AWSIAMPowerUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMAlxDarkUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: alx.dark@sagebase.org
+      Groups:
+        - !Ref AWSIAMPowerUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
+  AWSIAMPowerUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+        - !ImportValue bootstrap-EnforceMfaPolicy
   JacobianAccessPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
