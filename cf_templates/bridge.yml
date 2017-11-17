@@ -80,6 +80,16 @@ Resources:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
         - !Ref JacobianAccessPolicy
         - !ImportValue bootstrap-EnforceMfaPolicy
+  AWSIAMSumoLogicUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      Groups:
+        - !Ref AWSIAMLoggingServiceGroup
+  AWSIAMLoggingServiceGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
@@ -152,3 +162,16 @@ Resources:
             [ "AWS/DynamoDB", "SystemErrors", "Operation", "GetRecords", {"stat": "Sum"}]],
             "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
             "region":"us-east-1", "title":"DynamoErrors"}}]}
+Outputs:
+  AWSIAMSumoLogicUser:
+    Value: !Ref AWSIAMSumoLogicUser
+    Export:
+      Name: !Sub '${AWS::StackName}-SumoLogicUser'
+  AWSIAMSumoLogicUserAccessKey:
+    Value: !Ref AWSIAMSumoLogicUserAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-SumoLogicUserAccessKey'
+  AWSIAMSumoLogicUserSecretAccessKey:
+    Value: !GetAtt AWSIAMSumoLogicUserAccessKey.SecretAccessKey
+    Export:
+      Name: !Sub '${AWS::StackName}-SumoLogicSecretAccessKey'
