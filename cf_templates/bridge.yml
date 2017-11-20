@@ -85,6 +85,10 @@ Resources:
     Properties:
       Groups:
         - !Ref AWSIAMLoggingServiceGroup
+  AWSIAMSumoLogicUserAccessKey:
+    Type: 'AWS::IAM::AccessKey'
+    Properties:
+      UserName: !Ref AWSIAMSumoLogicUser
   AWSIAMLoggingServiceGroup:
     Type: 'AWS::IAM::Group'
     Properties:
