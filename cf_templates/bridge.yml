@@ -89,11 +89,27 @@ Resources:
     Type: 'AWS::IAM::AccessKey'
     Properties:
       UserName: !Ref AWSIAMSumoLogicUser
+  IAMLoggingServiceManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+            Action:
+              - 's3:Get*'
+              - 's3:List*'
+            Effect: Allow
+            Resource:
+              - !Join
+                - '-'
+                - - arn:aws:s3:::elasticbeanstalk
+                  - !Ref AWS::Region
+                  - !Ref AWS::AccountId
   AWSIAMLoggingServiceGroup:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - !Ref IAMLoggingServiceManagedPolicy
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
     Properties:
