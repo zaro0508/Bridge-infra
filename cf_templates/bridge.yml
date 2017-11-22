@@ -102,11 +102,11 @@ Resources:
             Resource:
               - !Join
                 - ''
-                - - arn:aws:s3:::elasticbeanstalk-
+                - - 'arn:aws:s3:::elasticbeanstalk-'
                   - !Ref AWS::Region
-                  - -
+                  - '-'
                   - !Ref AWS::AccountId
-                  - /*
+                  - '/*'
   AWSIAMLoggingServiceGroup:
     Type: 'AWS::IAM::Group'
     Properties:
