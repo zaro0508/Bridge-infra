@@ -95,9 +95,11 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-            Action:
-              - 's3:Get*'
-              - 's3:List*'
+          - Action:
+              - 's3:GetObject'
+              - 's3:GetObjectVersion'
+              - 's3:ListBucketVersions'
+              - 's3:ListBucket'
             Effect: Allow
             Resource:
               - !Join
@@ -107,6 +109,12 @@ Resources:
                   - '-'
                   - !Ref AWS::AccountId
                   - '/*'
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::elasticbeanstalk-'
+                  - !Ref AWS::Region
+                  - '-'
+                  - !Ref AWS::AccountId
   AWSIAMLoggingServiceGroup:
     Type: 'AWS::IAM::Group'
     Properties:
