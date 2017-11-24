@@ -14,6 +14,8 @@ Parameters:
     Type: String
     NoEcho: true
 Resources:
+  # !! IMPORTANT !! - CF cannot remove user with an attached MFA device.  Manully deactivate MFA before deleting users.
+  # https://docs.aws.amazon.com/cli/latest/reference/iam/deactivate-mfa-device.html
   AWSIAMXavierSchildwachterUser:
     Type: 'AWS::IAM::User'
     Properties:
