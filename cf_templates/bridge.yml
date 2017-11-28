@@ -52,6 +52,43 @@ Resources:
         - arn:aws:iam::aws:policy/PowerUserAccess
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
         - !ImportValue bootstrap-EnforceMfaPolicy
+  AWSIAMAdminRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - !GetAtt AWSIAMXavierSchildwachterUser.Arn
+                - !GetAtt AWSIAMKhaiDoUser.Arn
+                - !GetAtt AWSIAMAlxDarkUser.Arn
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  AWSIAMAdminRolePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "admin"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "*"
+            Resource: "*"
+      Roles:
+        -
+          !Ref AWSIAMAdminRole
+  AWSIAMInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/"
+      Roles:
+        -
+          !Ref "AWSIAMAdminRole"
   # resources for auditors
   JacobianAccessPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
