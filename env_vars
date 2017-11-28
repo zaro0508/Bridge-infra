@@ -1,3 +1,5 @@
 # unencypted environment variables
 export NewRelicAccountId_develop=754728514883
 export NewRelicAccountId_prod=754728514883
+export OperatorEmail_develop=bridgeops-develop@sagebase.org
+export OperatorEmail_prod=bridgeops@sagebase.org
