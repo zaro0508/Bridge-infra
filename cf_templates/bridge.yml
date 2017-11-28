@@ -219,7 +219,8 @@ Resources:
   AWSSNSCloudtrailTopicPolicy:
     Type: "AWS::SNS::TopicPolicy"
     Properties:
-      Topics: !Ref AWSSNSCloudtrailTopic
+      Topics:
+        - !Ref AWSSNSCloudtrailTopic
       PolicyDocument:
         Version: "2008-10-17"
         Statement:
