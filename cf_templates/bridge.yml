@@ -125,15 +125,11 @@ Resources:
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3CloudtrailBucket
-                  - '/AWSLogs/'
-                  - !Ref AWS::AccountId
                   - '/*'
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
                   - !Ref AWSS3CloudtrailBucket
-                  - '/AWSLogs/'
-                  - !Ref AWS::AccountId
   AWSIAMLoggingServiceGroup:
     Type: 'AWS::IAM::Group'
     Properties:
