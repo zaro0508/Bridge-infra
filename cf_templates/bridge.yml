@@ -261,7 +261,8 @@ Resources:
           "Value": "GetRecords"
       Period: 900
       Statistic: Maximum
-      Threshold: 1
+      Threshold: 10
+      TreatMissingData: notBreaching
   AWSCWDynamoDashboard:
     Type: 'AWS::CloudWatch::Dashboard'
     Properties:
