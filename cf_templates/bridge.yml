@@ -237,6 +237,8 @@ Resources:
       SnsTopicName: !GetAtt AWSSNSCloudtrailTopic.TopicName
       IsLogging: true
       EnableLogFileValidation: true
+      IncludeGlobalServiceEvents: true
+      IsMultiRegionTrail: true
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
