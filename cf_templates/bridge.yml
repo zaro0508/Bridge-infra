@@ -48,6 +48,15 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMDwayneJeng:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: dwayne.jeng@sagebase.org
+      Groups:
+        - !Ref AWSIAMPowerUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMPowerUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
@@ -68,6 +77,7 @@ Resources:
                 - !GetAtt AWSIAMXavierSchildwachterUser.Arn
                 - !GetAtt AWSIAMKhaiDoUser.Arn
                 - !GetAtt AWSIAMAlxDarkUser.Arn
+                - !GetAtt AWSIAMDwayneJeng.Arn
             Action:
               - "sts:AssumeRole"
       Path: "/"
