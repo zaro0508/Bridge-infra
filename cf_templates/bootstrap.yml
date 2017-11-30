@@ -11,6 +11,11 @@
 Description: Bootstrap resources for AWS account
 AWSTemplateFormatVersion: 2010-09-09
 Outputs:
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
   AWSIAMTravisUser:
     Value: !Ref AWSIAMTravisUser
     Export:

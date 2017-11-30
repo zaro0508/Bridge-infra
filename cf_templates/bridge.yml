@@ -16,8 +16,11 @@ Parameters:
   OperatorEmail:
     Type: String
 Resources:
-  # !! IMPORTANT !! - CF cannot remove user with an attached MFA device.  Manully deactivate MFA before deleting users.
-  # https://docs.aws.amazon.com/cli/latest/reference/iam/deactivate-mfa-device.html
+  # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
+  # Therefore you must do the following before deleting them from this file:
+  # 1. Detach or remove the following user resources: login profile, attached
+  #    MFA device, access-keys, ssh-keys, and policies.
+  # 2. Detach the user from all groups.
   AWSIAMXavierSchildwachterUser:
     Type: 'AWS::IAM::User'
     Properties:
