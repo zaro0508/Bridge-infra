@@ -391,6 +391,10 @@ Resources:
       EnableLogFileValidation: true
       IncludeGlobalServiceEvents: true
       IsMultiRegionTrail: true
+  # Cloudformation bucket for CF templates
+  AWSS3CloudformationBucket:
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: Delete
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
@@ -450,3 +454,7 @@ Outputs:
     Value: !Ref AWSIAMEnforceMfaPolicy
     Export:
       Name: !Sub '${AWS::StackName}-EnforceMfaPolicy'
+  AWSS3CloudformationBucket:
+    Value: !Ref AWSS3CloudformationBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-CloudformationBucket'
