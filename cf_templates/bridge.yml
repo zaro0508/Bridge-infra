@@ -396,7 +396,7 @@ Resources:
     Type: "AWS::S3::Bucket"
     DeletionPolicy: Delete
     Properties:
-      BucketName: !Sub '${AWS::AccountId}-${AWS::StackName}-cloudformation-assets'
+      BucketName: !Sub '${AWS::AccountId}-${AWS::StackName}-cloudformation-artifacts'
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
