@@ -444,10 +444,6 @@ Outputs:
     Value: !Ref AWSIAMSumoLogicUserAccessKey
     Export:
       Name: !Sub '${AWS::StackName}-SumoLogicUserAccessKey'
-  AWSIAMSumoLogicUserSecretAccessKey:
-    Value: !GetAtt AWSIAMSumoLogicUserAccessKey.SecretAccessKey
-    Export:
-      Name: !Sub '${AWS::StackName}-SumoLogicSecretAccessKey'
   AWSS3CloudtrailBucket:
     Value: !Ref AWSS3CloudtrailBucket
     Export:

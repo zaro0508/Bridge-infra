@@ -24,10 +24,6 @@ Outputs:
     Value: !Ref AWSIAMTravisUserAccessKey
     Export:
       Name: !Sub '${AWS::StackName}-TravisUserAccessKey'
-  AWSIAMTravisUserSecretAccessKey:
-    Value: !GetAtt AWSIAMTravisUserAccessKey.SecretAccessKey
-    Export:
-      Name: !Sub '${AWS::StackName}-TravisUserSecretAccessKey'
 Resources:
   AWSIAMTravisUserAccessKey:
     Type: 'AWS::IAM::AccessKey'
