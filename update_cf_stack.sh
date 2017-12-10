@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+TEMPLATE_URL=$1
+
 # double interpolate environment variables
 eval export "InitNewUserPassword=\$InitNewUserPassword_$TRAVIS_BRANCH"
 eval export "JacobianUserPassword=\$JacobianUserPassword_$TRAVIS_BRANCH"
@@ -11,7 +13,7 @@ eval export "OperatorEmail=\$OperatorEmail_$TRAVIS_BRANCH"
 aws cloudformation update-stack \
 --stack-name $STACK_NAME \
 --capabilities CAPABILITY_NAMED_IAM \
---template-body file://cf_templates/bridge.yml \
+--template-url $TEMPLATE_URL \
 --parameters \
 ParameterKey=InitNewUserPassword,ParameterValue="$InitNewUserPassword" \
 ParameterKey=JacobianUserPassword,ParameterValue="$JacobianUserPassword" \
