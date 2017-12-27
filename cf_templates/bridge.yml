@@ -35,7 +35,7 @@ Resources:
     Properties:
       UserName: khai.do@sagebase.org
       Groups:
-        - !Ref AWSIAMPowerUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -44,7 +44,7 @@ Resources:
     Properties:
       UserName: alx.dark@sagebase.org
       Groups:
-        - !Ref AWSIAMPowerUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -53,7 +53,7 @@ Resources:
     Properties:
       UserName: dwayne.jeng@sagebase.org
       Groups:
-        - !Ref AWSIAMPowerUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
