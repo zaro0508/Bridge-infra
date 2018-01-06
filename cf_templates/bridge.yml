@@ -74,6 +74,7 @@ Resources:
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
         - !Ref AWSIAMEnforceMfaPolicy
         - !Ref AWSIAMDynamoDenyDeletePolicy
+        - !Ref AWSIAMRdsDenyDeletePolicy
   AWSIAMPowerUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
@@ -109,6 +110,20 @@ Resources:
             Action:
               - dynamodb:DeleteItem
               - dynamodb:DeleteTable
+            Resource: "*"
+  AWSIAMRdsDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              - rds:DeleteDBCluster
+              - rds:DeleteDBClusterSnapshot
+              - rds:DeleteDBInstance
+              - rds:DeleteDBSnapshot
             Resource: "*"
   AWSIAMAdminRolePolicy:
     Type: "AWS::IAM::Policy"
