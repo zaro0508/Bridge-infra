@@ -108,7 +108,6 @@ Resources:
           -
             Effect: Deny
             Action:
-              - dynamodb:DeleteItem
               - dynamodb:DeleteTable
             Resource: "*"
   AWSIAMRdsDenyDeletePolicy:
