@@ -108,6 +108,8 @@ Resources:
           -
             Effect: Deny
             Action:
+              # UpdateTable operation retricts deletion of indexes
+              - dynamodb:UpdateTable
               - dynamodb:DeleteTable
             Resource: "*"
   AWSIAMRdsDenyDeletePolicy:
