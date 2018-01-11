@@ -445,6 +445,111 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       BucketName: !Sub '${AWS::StackName}-cloudformation-artifacts-${AWS::AccountId}'
+  # Monitor Cloudformation deployments
+  # https://aws.amazon.com/premiumsupport/knowledge-center/cloudformation-rollback-email/
+  AWSSNSCloudformationTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint: !Ref OperatorEmail
+          Protocol: email
+  AWSSNSCloudformationTopicPolicy:
+    Type: "AWS::SNS::TopicPolicy"
+    Properties:
+      Topics:
+        - !Ref AWSSNSCloudformationTopic
+      PolicyDocument:
+        Version: "2008-10-17"
+        Statement:
+          -
+            Sid: "CloudformationPublishPolicy"
+            Effect: "Allow"
+            Resource: !Ref AWSSNSCloudformationTopic
+            Action: "SNS:Publish"
+          -
+            Sid: "CloudformationLogsPolicy"
+            Effect: "Allow"
+            Resource: "arn:aws:logs:*:*:*"
+            Action:
+              - "logs:CreateLogGroup"
+              - "logs:CreateLogStream"
+              - "logs:PutLogEvents"
+  AWSIAMCloudformationLambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - "lambda.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - !Ref AWSSNSCloudformationTopicPolicy
+  AWSLambaCloudformationFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Handler: "index.handler"
+      Role: !Ref AWSIAMCloudformationLambdaRole
+      Runtime: "nodejs4.3"
+      Environment:
+        Variables:
+          CloudformationTopicArn: !Ref AWSSNSCloudformationTopic
+      Code:
+        ZipFile: >
+          topic_arn = process.env.CloudformationTopicArn;
+          var AWS = require('aws-sdk');
+          AWS.config.region_array = topic_arn.split(':'); // splits the ARN in to and array
+          AWS.config.region = AWS.config.region_array[3];  // makes the 4th variable in the array (will always be the region)
+
+
+          // ####################   BEGIN LOGGING   ########################
+
+          console.log(topic_arn);   // just for logging to the that the var was parsed correctly
+          console.log(AWS.config.region_array); // to see if the SPLIT command worked
+          console.log(AWS.config.region_array[3]); // to see if it got the region correctly
+          console.log(AWS.config.region); // to confirm that it set the AWS.config.region to the correct region from the ARN
+
+          // ####################  END LOGGING (you can remove this logging section)  ########################
+
+
+          exports.handler = function(event, context) {
+              const message = event.Records[0].Sns.Message;
+              if (message.indexOf("UPDATE_ROLLBACK_IN_PROGRESS") > -1) {
+                  var fields = message.split("\n");
+                  subject = fields[11].replace(/['']+/g, '');
+                  send_SNS_notification(subject, message);
+              }
+          };
+
+          function send_SNS_notification(subject, message) {
+              var sns = new AWS.SNS();
+              subject = subject + " is in UPDATE_ROLLBACK_IN_PROGRESS";
+              sns.publish({
+                  Subject: subject,
+                  Message: message,
+                  TopicArn: topic_arn
+              }, function(err, data) {
+                  if (err) {
+                      console.log(err.stack);
+                      return;
+                  }
+                  console.log('push sent');
+                  console.log(data);
+              });
+          };
+  AWSSNSCloudformationNotifyLambdaTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint: !GetAtt AWSLambaCloudformationFunction.Arn
+          Protocol: lambda
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
@@ -508,3 +613,11 @@ Outputs:
     Value: !Ref FhcrcVpnCidrip
     Export:
       Name: !Sub '${AWS::StackName}-FhcrcVpnCidrip'
+  AWSLambaCloudformationFunction:
+    Value: !Ref AWSLambaCloudformationFunction
+    Export:
+      Name: !Sub '${AWS::StackName}-LambaCloudformationFunction'
+  AWSSNSCloudformationTopic:
+    Value: !Ref AWSSNSCloudformationTopic
+    Export:
+      Name: !Sub '${AWS::StackName}-CloudformationTopic'
