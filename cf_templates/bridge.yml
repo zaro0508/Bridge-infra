@@ -15,6 +15,9 @@ Parameters:
     NoEcho: true
   OperatorEmail:
     Type: String
+  FhcrcVpnCidrip:
+    Type: String
+    NoEcho: true
 Resources:
   # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
   # Therefore you must do the following before deleting them from this file:
@@ -499,3 +502,7 @@ Outputs:
     Value: !Ref AWSS3CloudformationBucket
     Export:
       Name: !Sub '${AWS::StackName}-CloudformationBucket'
+  FhcrcVpnCidrip:
+    Value: !Ref FhcrcVpnCidrip
+    Export:
+      Name: !Sub '${AWS::StackName}-FhcrcVpnCidrip'

@@ -11,4 +11,5 @@ ParameterKey=InitNewUserPassword,ParameterValue="$InitNewUserPassword" \
 ParameterKey=JacobianUserPassword,ParameterValue="$JacobianUserPassword" \
 ParameterKey=NewRelicAccountId,ParameterValue=$NewRelicAccountId \
 ParameterKey=NewRelicExternalId,ParameterValue=$NewRelicExternalId \
-ParameterKey=OperatorEmail,ParameterValue=$OperatorEmail
+ParameterKey=OperatorEmail,ParameterValue=$OperatorEmail \
+ParameterKey=FhcrcVpnCidrip,ParameterValue=$FhcrcVpnCidrip
