@@ -619,3 +619,7 @@ Outputs:
     Value: !Ref AWSSNSCloudformationTopic
     Export:
       Name: !Sub '${AWS::StackName}-CloudformationTopic'
+  AWSSNSCloudformationNotifyLambdaTopic:
+    Value: !Ref AWSSNSCloudformationNotifyLambdaTopic
+    Export:
+      Name: !Sub '${AWS::StackName}-CloudformationNotifyLambdaTopicArn'
