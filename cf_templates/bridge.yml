@@ -493,7 +493,7 @@ Resources:
     Type: "AWS::Lambda::Function"
     Properties:
       Handler: "index.handler"
-      Role: !Ref AWSIAMCloudformationLambdaRole
+      Role: !GetAtt AWSIAMCloudformationLambdaRole.Arn
       Runtime: "nodejs4.3"
       Environment:
         Variables:
