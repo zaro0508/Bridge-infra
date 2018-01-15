@@ -454,8 +454,8 @@ Resources:
         -
           Endpoint: !Ref OperatorEmail
           Protocol: email
-  AWSSNSCloudformationTopicPolicy:
-    Type: "AWS::SNS::TopicPolicy"
+  AWSIAMCloudformationTopicPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
       Topics:
         - !Ref AWSSNSCloudformationTopic
@@ -463,17 +463,13 @@ Resources:
         Version: "2008-10-17"
         Statement:
           -
-            Sid: "CloudformationPublishPolicy"
+            Sid: "CloudformationSnsPolicy"
             Effect: "Allow"
-            Principal:
-              Service: "cloudtrail.amazonaws.com"
             Resource: !Ref AWSSNSCloudformationTopic
             Action: "SNS:Publish"
           -
             Sid: "CloudformationLogsPolicy"
             Effect: "Allow"
-            Principal:
-              Service: "cloudtrail.amazonaws.com"
             Resource: "arn:aws:logs:*:*:*"
             Action:
               - "logs:CreateLogGroup"
@@ -494,7 +490,7 @@ Resources:
               - "sts:AssumeRole"
       Path: "/"
       ManagedPolicyArns:
-        - !Ref AWSSNSCloudformationTopicPolicy
+        - !Ref AWSIAMCloudformationTopicPolicy
   AWSLambaCloudformationFunction:
     Type: "AWS::Lambda::Function"
     Properties:
