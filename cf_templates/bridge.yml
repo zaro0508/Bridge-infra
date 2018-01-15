@@ -482,7 +482,7 @@ Resources:
           -
             Effect: "Allow"
             Principal:
-              AWS:
+              Service:
                 - "lambda.amazonaws.com"
             Action:
               - "sts:AssumeRole"
