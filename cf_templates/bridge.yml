@@ -457,8 +457,6 @@ Resources:
   AWSIAMCloudformationTopicPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      Topics:
-        - !Ref AWSSNSCloudformationTopic
       PolicyDocument:
         Version: "2008-10-17"
         Statement:
