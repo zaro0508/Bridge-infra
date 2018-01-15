@@ -7,6 +7,7 @@ aws cloudformation update-stack \
 --capabilities CAPABILITY_NAMED_IAM \
 --template-url $TEMPLATE_URL \
 --parameters \
+ParameterKey=AwsAccount,ParameterValue=$AwsAccount \
 ParameterKey=InitNewUserPassword,ParameterValue="$InitNewUserPassword" \
 ParameterKey=JacobianUserPassword,ParameterValue="$JacobianUserPassword" \
 ParameterKey=NewRelicAccountId,ParameterValue=$NewRelicAccountId \
