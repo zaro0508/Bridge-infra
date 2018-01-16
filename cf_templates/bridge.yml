@@ -26,7 +26,7 @@ Parameters:
     Type: String
     NoEcho: true
 Conditions:
-  CreateProResources: !Equals [ !Ref AwsAccount, prod ]
+  CreateProdResources: !Equals [ !Ref AwsAccount, prod ]
 Resources:
   # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
   # Therefore you must do the following before deleting them from this file:
