@@ -1,6 +1,13 @@
 Description: Common resources for AWS account
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+  AwsAccount:
+    Type: String
+    Default: develop
+    AllowedValues:
+      - prod
+      - develop
+    ConstraintDescription: must specify develop or prod.
   InitNewUserPassword:
     Type: String
     NoEcho: true
@@ -18,6 +25,8 @@ Parameters:
   FhcrcVpnCidrip:
     Type: String
     NoEcho: true
+Conditions:
+  CreateProResources: !Equals [ !Ref AwsAccount, prod ]
 Resources:
   # !! IMPORTANT !! - AWS API will refuse to remove users that have attached resources.
   # Therefore you must do the following before deleting them from this file:
@@ -586,6 +595,17 @@ Resources:
             [ "AWS/DynamoDB", "SystemErrors", "Operation", "GetRecords", {"stat": "Sum"}]],
             "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
             "region":"us-east-1", "title":"DynamoErrors"}}]}
+  # S3 bucket for android apps
+  AWSS3AndroidAppBucket:
+    Type: AWS::S3::Bucket
+    Condition: CreateProdResources
+    Properties:
+      AccessControl: PublicRead
+      BucketName: android-apps.sagebridge.org
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+    DeletionPolicy: Retain
 Outputs:
   AWSIAMSumoLogicUser:
     Value: !Ref AWSIAMSumoLogicUser
@@ -623,3 +643,16 @@ Outputs:
     Value: !Ref AWSSNSCloudformationNotifyLambdaTopic
     Export:
       Name: !Sub '${AWS::StackName}-CloudformationNotifyLambdaTopicArn'
+  AWSS3AndroidAppBucketWebsiteURL:
+    Condition: CreateProdResources
+    Value: !GetAtt AWSS3AndroidAppBucket.WebsiteURL
+    Export:
+      Name: !Sub '${AWS::StackName}-AndroidAppBucketWebsiteURL'
+  AWSS3AndroidAppBucketSecureURL:
+    Condition: CreateProdResources
+    Value: !Join
+      - ''
+      - - 'https://'
+        - !GetAtt AWSS3AndroidAppBucket.DomainName
+    Export:
+      Name: !Sub '${AWS::StackName}-AndroidAppBucketSecureURL'
