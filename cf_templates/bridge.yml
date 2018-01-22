@@ -526,6 +526,7 @@ Resources:
 
 
           exports.handler = function(event, context) {
+              console.log(event.Records[0]);
               const message = event.Records[0].Sns.Message;
               if (message.indexOf("UPDATE_ROLLBACK_IN_PROGRESS") > -1) {
                   var fields = message.split("\n");
