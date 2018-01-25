@@ -78,6 +78,15 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMShannonYoungUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: shannon.young@sagebase.org
+      Groups:
+        - !Ref AWSIAMiOSDevelopersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
