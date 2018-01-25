@@ -69,6 +69,15 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMErinMountsUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: erin.mounts@sagebase.org
+      Groups:
+        - !Ref AWSIAMiOSDevelopersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMJoshuaLiuUser:
     Type: 'AWS::IAM::User'
     Properties:
