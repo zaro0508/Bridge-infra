@@ -94,6 +94,42 @@ Resources:
         - arn:aws:iam::aws:policy/PowerUserAccess
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
         - !Ref AWSIAMEnforceMfaPolicy
+  AWSIAMiOSBucketManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ListBucketAccess
+            Action:
+              - 's3:ListAllMyBuckets'
+            Effect: Allow
+            Resource: "arn:aws:s3:::*"
+          - Sid: LocationBucketAccess
+            Action:
+              - 's3:ListBucket'
+              - 's3:GetBucketLocation'
+            Effect: Allow
+            Resource: "arn:aws:s3:::ios-apps.sagebridge.org"
+          - Sid: BucketObjectAccess
+            Action:
+              - 's3:PutObject'
+              - 's3:PutObjectAcl'
+              - 's3:GetObject'
+              - 's3:GetObjectAcl'
+              - 's3:DeleteObject'
+            Effect: Allow
+            Resource: "arn:aws:s3:::ios-apps.sagebridge.org/*"
+  AWSIAMiOSDevelopersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/IAMReadOnlyAccess
+        - !Ref AWSIAMEnforceMfaPolicy
+        - !Ref AWSIAMiOSBucketManagedPolicy
+        # IAM does not support object level permissions for Cloudfront, it's either all or nothing.
+        # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html
+        - arn:aws:iam::aws:policy/CloudFrontFullAccess
   AWSIAMAdminRole:
     Type: "AWS::IAM::Role"
     Properties:
