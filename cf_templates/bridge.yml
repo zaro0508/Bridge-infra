@@ -612,6 +612,13 @@ Resources:
         -
           Endpoint: !GetAtt AWSLambaCloudformationFunction.Arn
           Protocol: lambda
+  AWSLambdaCloudformationNotifyInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      FunctionName: !GetAtt AWSLambaCloudformationFunction.Arn
+      Action: 'lambda:InvokeFunction'
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref AWSSNSCloudformationNotifyLambdaTopic
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
