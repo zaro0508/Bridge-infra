@@ -436,6 +436,11 @@ Resources:
               BoolIfExists:
                 'aws:MultiFactorAuthPresent': 'false'
   # resources for cloudtrail
+  AWSLogsCloudtrailLogGroup:
+    Type: "AWS::Logs::LogGroup"
+    Properties:
+      LogGroupName: !Sub '/aws/cloudtrail/${AWS::StackName}.log'
+      RetentionInDays: 90
   AWSS3CloudtrailBucket:
     DeletionPolicy: Retain
     Type: "AWS::S3::Bucket"
@@ -490,12 +495,50 @@ Resources:
               Service: "cloudtrail.amazonaws.com"
             Resource: "*"
             Action: "SNS:Publish"
+  AWSIAMCloudtrailLogManagedPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: AWSCloudTrailCreateLogStream
+            Effect: Allow
+            Action:
+              - 'logs:CreateLogStream'
+            Resource:
+              - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AWSLogsCloudtrailLogGroup}:log-stream:${AWS::AccountId}_CloudTrail_${AWS::Region}*'
+          - Sid: AWSCloudTrailPutLogEvents
+            Effect: Allow
+            Action:
+              - 'logs:PutLogEvents'
+            Resource:
+              - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${AWSLogsCloudtrailLogGroup}:log-stream:${AWS::AccountId}_CloudTrail_${AWS::Region}*'
+  AWSIAMCloudtrailLogRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "cloudtrail.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - !Ref AWSIAMCloudtrailLogManagedPolicy
   AWSCloudtrailTrail:
     DependsOn:
+      - AWSLogsCloudtrailLogGroup
       - AWSIAMS3CloudtrailBucketPolicy
       - AWSSNSCloudtrailTopicPolicy
+      - AWSIAMCloudtrailLogRole
     Type: "AWS::CloudTrail::Trail"
     Properties:
+      CloudWatchLogsLogGroupArn: !GetAtt AWSLogsCloudtrailLogGroup.Arn
+      CloudWatchLogsRoleArn: !GetAtt AWSIAMCloudtrailLogRole.Arn
       S3BucketName: !Ref AWSS3CloudtrailBucket
       SnsTopicName: !GetAtt AWSSNSCloudtrailTopic.TopicName
       IsLogging: true
@@ -619,6 +662,87 @@ Resources:
       Action: 'lambda:InvokeFunction'
       Principal: sns.amazonaws.com
       SourceArn: !Ref AWSSNSCloudformationNotifyLambdaTopic
+  # AWS Config service, https://github.com/awslabs/aws-cloudformation-templates/blob/master/aws/services/Config/Config.yaml
+  AWSConfigConfigurationRecorder:
+    Type: AWS::Config::ConfigurationRecorder
+    Properties:
+      RecordingGroup:
+        AllSupported: true
+        IncludeGlobalResourceTypes: true
+      RoleARN: !GetAtt [AWSIAMConfigRole, Arn]
+  AWSConfigDeliveryChannel:
+    Type: AWS::Config::DeliveryChannel
+    Properties:
+      ConfigSnapshotDeliveryProperties:
+        DeliveryFrequency: Six_Hours
+      S3BucketName: !Ref 'AWSS3ConfigBucket'
+      SnsTopicARN: !Ref 'AWSSnsConfigTopic'
+  AWSS3ConfigBucket:
+    Type: AWS::S3::Bucket
+  AWSSnsConfigTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        -
+          Endpoint: !Ref OperatorEmail
+          Protocol: email
+  AWSSnsConfigTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Id: ConfigTopicPolicy
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: config.amazonaws.com
+          Action: SNS:Publish
+          Resource: '*'
+      Topics: [!Ref 'AWSSnsConfigTopic']
+  AWSIAMConfigRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [config.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSConfigRole']
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action: s3:GetBucketAcl
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'AWSS3ConfigBucket']]
+          - Effect: Allow
+            Action: s3:PutObject
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref 'AWSS3ConfigBucket', /AWSLogs/,
+                !Ref 'AWS::AccountId', /*]]
+            Condition:
+              StringEquals:
+                s3:x-amz-acl: bucket-owner-full-control
+          - Effect: Allow
+            Action: config:Put*
+            Resource: '*'
+  # https://docs.aws.amazon.com/config/latest/developerguide/cloudtrail-enabled.html
+  AWSConfigCloudtrailEnabledConfigRule:
+    Type: 'AWS::Config::ConfigRule'
+    DependsOn: AWSConfigConfigurationRecorder
+    Properties:
+      Description: Checks whether AWS CloudTrail is enabled.
+      InputParameters:
+        s3BucketName: !Ref AWSS3CloudtrailBucket
+        snsTopicArn: !Ref AWSSNSCloudtrailTopic
+        cloudWatchLogsLogGroupArn: !GetAtt AWSCloudtrailTrail.Arn
+      Scope: {}
+      Source:
+        Owner: AWS
+        SourceIdentifier: CLOUD_TRAIL_ENABLED
+      MaximumExecutionFrequency: TwentyFour_Hours
   # dynamodb monitoring resources
   AWSSNSDynamoTopic:
     Type: "AWS::SNS::Topic"
