@@ -582,7 +582,7 @@ Resources:
           exports.handler = function(event, context) {
               console.log(event.Records[0]);
               const message = event.Records[0].Sns.Message;
-              if (message.indexOf("UPDATE_ROLLBACK_IN_PROGRESS") > -1) {
+              if (message.indexOf("UPDATE_ROLLBACK") > -1) {
                   var fields = message.split("\n");
                   subject = fields[11].replace(/['']+/g, '');
                   send_SNS_notification(subject, message);
@@ -591,7 +591,7 @@ Resources:
 
           function send_SNS_notification(subject, message) {
               var sns = new AWS.SNS();
-              subject = subject + " is in UPDATE_ROLLBACK_IN_PROGRESS";
+              subject = subject + " failed a cloudformation update";
               sns.publish({
                   Subject: subject,
                   Message: message,
