@@ -737,7 +737,7 @@ Resources:
       InputParameters:
         s3BucketName: !Ref AWSS3CloudtrailBucket
         snsTopicArn: !Ref AWSSNSCloudtrailTopic
-        cloudWatchLogsLogGroupArn: !GetAtt AWSCloudtrailTrail.Arn
+        cloudWatchLogsLogGroupArn: !GetAtt AWSLogsCloudtrailLogGroup.Arn
       Scope: {}
       Source:
         Owner: AWS
