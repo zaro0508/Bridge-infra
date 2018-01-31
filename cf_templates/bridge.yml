@@ -676,7 +676,6 @@ Resources:
       ConfigSnapshotDeliveryProperties:
         DeliveryFrequency: Six_Hours
       S3BucketName: !Ref 'AWSS3ConfigBucket'
-      SnsTopicARN: !Ref 'AWSSnsConfigTopic'
   AWSS3ConfigBucket:
     Type: AWS::S3::Bucket
   AWSSnsConfigTopic:
