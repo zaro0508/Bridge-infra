@@ -817,7 +817,7 @@ Resources:
       EvaluationPeriods: 1
       MetricName: SMSMonthToDateSpentUSD
       Namespace: AWS/SNS
-      Period: 900
+      Period: 300
       Statistic: Average
       TreatMissingData: notBreaching
   AWSCWSmsDashboard:
