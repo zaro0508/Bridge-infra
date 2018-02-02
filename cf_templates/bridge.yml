@@ -780,6 +780,67 @@ Resources:
             [ "AWS/DynamoDB", "SystemErrors", "Operation", "GetRecords", {"stat": "Sum"}]],
             "view": "timeSeries", "stacked": true, "period":300, "stat":"Sum",
             "region":"us-east-1", "title":"DynamoErrors"}}]}
+  # SMS monitoring resources
+  AWSSNSSmsTopic:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint: !Ref OperatorEmail
+          Protocol: email
+  AWSCWSmsNumberOfNotificationsFailedAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSSmsTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 5
+      EvaluationPeriods: 1
+      MetricName: NumberOfNotificationsFailed
+      Namespace: AWS/SNS
+      Dimensions:
+        -
+          "Name": "PhoneNumber"
+          "Value": "PhoneNumberDirect"
+      Period: 3600
+      Statistic: Average
+      TreatMissingData: notBreaching
+  AWSCWSmsSpendingdAlarm:
+    Type: "AWS::CloudWatch::Alarm"
+    Properties:
+      ActionsEnabled: true
+      AlarmActions:
+        - !Ref AWSSNSSmsTopic
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Threshold: 16
+      EvaluationPeriods: 1
+      MetricName: SMSMonthToDateSpentUSD
+      Namespace: AWS/SNS
+      Period: 900
+      Statistic: Average
+      TreatMissingData: notBreaching
+  AWSCWSmsDashboard:
+    Type: 'AWS::CloudWatch::Dashboard'
+    Properties:
+      DashboardBody: !Join
+        - ''
+        - - >-
+            {"widgets": [{ "type":"metric", "x":0, "y":0, "width":12,
+            "height":6, "properties":{"metrics":[[ "AWS/SNS",
+            "SMSMonthToDateSpentUSD"]],
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "stat":"Average", "region":"us-east-1",
+            "title":"SMSMonthToDateSpentUSD"}},
+          - >-
+            {"type":"metric", "x":0, "y":0, "width":12, "height":6,
+            "properties":{"metrics":[[ "AWS/SNS", "NumberOfNotificationsFailed",
+            "PhoneNumber","PhoneNumberDirect
+          - '"]],'
+          - >-
+            "view": "timeSeries", "stacked": true, "period":300,
+            "region":"us-east-1", "title":"NumberOfNotificationsFailed"}}]}
   # S3 bucket for android apps
   AWSS3AndroidAppBucket:
     Type: AWS::S3::Bucket
