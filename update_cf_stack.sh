@@ -14,4 +14,5 @@ ParameterKey=JacobianUserPassword,ParameterValue="$JacobianUserPassword" \
 ParameterKey=NewRelicAccountId,ParameterValue=$NewRelicAccountId \
 ParameterKey=NewRelicExternalId,ParameterValue=$NewRelicExternalId \
 ParameterKey=OperatorEmail,ParameterValue=$OperatorEmail \
-ParameterKey=FhcrcVpnCidrip,ParameterValue=$FhcrcVpnCidrip
+ParameterKey=FhcrcVpnCidrip,ParameterValue=$FhcrcVpnCidrip \
+ParameterKey=VpcPeeringRequesterAwsAccountId,ParameterValue=$VpcPeeringRequesterAwsAccountId
