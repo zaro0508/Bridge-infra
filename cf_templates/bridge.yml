@@ -25,6 +25,12 @@ Parameters:
   FhcrcVpnCidrip:
     Type: String
     NoEcho: true
+  VpcPeeringRequesterAwsAccountId:
+    Type: String
+    NoEcho: true
+    Description: The AWS account running the Sophos-VPN
+    AllowedPattern: '[0-9]*'
+    ConstraintDescription: Must be account number without dashes
 Conditions:
   CreateProdResources: !Equals [ !Ref AwsAccount, prod ]
 Resources:
@@ -296,6 +302,26 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - !Ref IAMLoggingServiceManagedPolicy
+
+
+
+
+  AWSIAMNewRelicRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "cloudtrail.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+      ManagedPolicyArns:
+        - !Ref AWSIAMCloudtrailLogManagedPolicy
   # resources for app monitoring services
   AWSIAMNewRelicBudgetPolicy:
     Type: "AWS::IAM::Policy"
@@ -852,6 +878,31 @@ Resources:
         IndexDocument: index.html
         ErrorDocument: error.html
     DeletionPolicy: Retain
+  # Create a role to authorize the VPC Peering request from a specific account,
+  # this is used to create the VPC Peer between different accounts in  CloudFormation
+  # https://github.com/awslabs/aws-cloudformation-templates/tree/master/aws/solutions/VPCPeering
+  VPCPeeringAuthorizerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Join
+                - ''
+                - - 'arn:aws:iam::'
+                  - !Ref VpcPeeringRequesterAwsAccountId
+                  - ':root'
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: VPCAuthorizer
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'ec2:AcceptVpcPeeringConnection'
+                Resource:
+                  - '*'
 Outputs:
   AWSIAMSumoLogicUser:
     Value: !Ref AWSIAMSumoLogicUser
@@ -902,3 +953,8 @@ Outputs:
         - !GetAtt AWSS3AndroidAppBucket.DomainName
     Export:
       Name: !Sub '${AWS::StackName}-AndroidAppBucketSecureURL'
+  VPCPeeringAuthorizerRole:
+    Description: Cross Account Role Name
+    Value: !Ref VPCPeeringAuthorizerRole
+    Export:
+      Name: !Sub '${AWS::StackName}-VPCPeeringAuthorizerRole'
