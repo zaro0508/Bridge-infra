@@ -903,6 +903,22 @@ Resources:
                   - 'ec2:AcceptVpcPeeringConnection'
                 Resource:
                   - '*'
+  # Security group to allow VPN users access to aws resources
+  VpnSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: Security Group for VPN
+      SecurityGroupIngress:
+        - CidrIp: "10.1.0.0/16"
+          FromPort: -1
+          ToPort: -1
+          IpProtocol: -1
+          Description: "Allow all VPN traffic"
+      SecurityGroupEgress:
+        - CidrIp: "0.0.0.0/0"
+          FromPort: -1
+          ToPort: -1
+          IpProtocol: -1
 Outputs:
   AWSIAMSumoLogicUser:
     Value: !Ref AWSIAMSumoLogicUser
@@ -958,3 +974,7 @@ Outputs:
     Value: !Ref VPCPeeringAuthorizerRole
     Export:
       Name: !Sub '${AWS::StackName}-VPCPeeringAuthorizerRole'
+  VpnSecurityGroup:
+    Value: !Ref VpnSecurityGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-VpnSecurityGroup'
