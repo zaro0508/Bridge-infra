@@ -1,6 +1,9 @@
 Description: Common resources for AWS account
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
+  AwsDefaultVpcId:
+    Description: The AWS account's default VPC id
+    Type: String
   AwsAccount:
     Type: String
     Default: develop
@@ -908,6 +911,7 @@ Resources:
     Type: 'AWS::EC2::SecurityGroup'
     Properties:
       GroupDescription: Security Group for VPN
+      VpcId: !Ref AwsDefaultVpcId
       SecurityGroupIngress:
         - CidrIp: "10.1.0.0/16"
           FromPort: -1
@@ -920,6 +924,10 @@ Resources:
           ToPort: -1
           IpProtocol: -1
 Outputs:
+  AwsDefaultVpcId:
+    Value: !Ref AwsDefaultVpcId
+    Export:
+      Name: !Sub '${AWS::StackName}-AwsDefaultVpcId'
   AWSIAMSumoLogicUser:
     Value: !Ref AWSIAMSumoLogicUser
     Export:

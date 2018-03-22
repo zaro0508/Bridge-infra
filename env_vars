@@ -1,4 +1,6 @@
 # unencypted environment variables
+export AwsDefaultVpcId_develop=vpc-f389e98a
+export AwsDefaultVpcId_prod=vpc-9c70bbf9
 export NewRelicAccountId_develop=754728514883
 export NewRelicAccountId_prod=754728514883
 export OperatorEmail_develop=bridgeops-develop@sagebase.org
