@@ -5,3 +5,6 @@ export NewRelicAccountId_develop=754728514883
 export NewRelicAccountId_prod=754728514883
 export OperatorEmail_develop=bridgeops-develop@sagebase.org
 export OperatorEmail_prod=bridgeops@sagebase.org
+export AdminCentralInfraCfBucket=bootstrap-awss3cloudformationbucket-19qromfd235z9
+export BridgeInfraCfBucket_develop=bridge-cloudformation-artifacts-420786776710
+export BridgeInfraCfBucket_prod=bridge-cloudformation-artifacts-649232250620

@@ -8,7 +8,7 @@ Install, configure and manage the Bridge AWS account.
 aws --profile aws-admin --region us-east-1 cloudformation create-stack \
   --stack-name bridge \
   --capabilities CAPABILITY_NAMED_IAM \
-  --template-body cf_templates/bridge.yml \
+  --template-body templates/bridge.yaml \
   --parameters \
   ParameterKey=JacobianUserPassword,ParameterValue=a_good_password \
   ..
@@ -20,11 +20,9 @@ The above should setup resources for the Bridge account.  Once the infrastructur
 you can access and view the account using the AWS console[1].  When you are satisified with how the account
 is configured you can run BridgePF-infra[2] template to setup BridgePF in the account.
 
-
 ## Continuous Integration
-We have configured Travis to deploy CF template updates.  Travis does this by running update_cf_stack.sh on every
-change.
-
+We have configured Travis to deploy CF template updates.  Travis deploys using
+[sceptre](https://sceptre.cloudreach.com/latest/about.html)
 
 # Contributions
 
