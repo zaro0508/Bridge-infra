@@ -1,0 +1,8 @@
+template_path: templates/peer-route-config-defaultvpc.yaml
+stack_name: peer-vpn-bridge-develop
+dependencies:
+  - bridge-develop
+parameters:
+  PeeringConnectionId: pcx-735aa01b
+  VpcPublicRouteTable: rtb-f333578f
+  VpnCidr: 10.1.0.0/16

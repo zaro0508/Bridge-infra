@@ -1,0 +1,12 @@
+template_path: remote-templates/peer-route-config.yaml
+stack_name: peer-vpn-bridge-aux
+dependencies:
+  - bridge-aux
+parameters:
+  PeeringConnectionId: pcx-568f753e
+  VpcPrivateRouteTable: rtb-5053332c
+  VpcPublicRouteTable: rtb-5343232f
+  VpnCidr: 10.1.0.0/16
+hooks:
+  before_update:
+    - !cmd "aws --profile {{ var.profile }} s3 cp s3://{{ environment_variable.AdminCentralInfraCfBucket }}/aws-infra/master/peer-route-config.yaml ./remote-templates/peer-route-config.yaml"
