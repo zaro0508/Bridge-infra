@@ -14,9 +14,6 @@ Parameters:
   InitNewUserPassword:
     Type: String
     NoEcho: true
-  JacobianUserPassword:
-    Type: String
-    NoEcho: true
   NewRelicAccountId:
     Type: String
     NoEcho: true
@@ -223,7 +220,7 @@ Resources:
         -
           !Ref "AWSIAMAdminRole"
   # resources for auditors
-  JacobianAccessPolicy:
+  AuditorAccessPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
     Properties:
         PolicyDocument:
@@ -241,19 +238,12 @@ Resources:
             - sqs:ReceiveMessage
             - sdb:Select
             Resource: "*"
-  AWSIAMJacobianUser:
-    Type: 'AWS::IAM::User'
-    Properties:
-      Groups:
-        - !Ref AWSIAMAuditorsGroup
-      LoginProfile:
-        Password: !Ref JacobianUserPassword
   AWSIAMAuditorsGroup:
     Type: 'AWS::IAM::Group'
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
-        - !Ref JacobianAccessPolicy
+        - !Ref AuditorAccessPolicy
         - !Ref AWSIAMEnforceMfaPolicy
   # resources for logging services
   AWSIAMSumoLogicUser:
