@@ -5,15 +5,11 @@ Install, configure and manage the Bridge AWS account.
 ## Create resources
 
 ```
-aws --profile aws-admin --region us-east-1 cloudformation create-stack \
-  --stack-name bridge \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --template-body templates/bridge.yaml \
-  --parameters \
-  ParameterKey=JacobianUserPassword,ParameterValue=a_good_password \
-  ..
-  .. [Rest of the parameters from update_cf_stack.sh]
-
+# unlock repo
+git-crypt unlock
+# set env vars
+source env_vars && source env_vars.secret
+# Run sceptre to create or update CF stacks
 ```
 
 The above should setup resources for the Bridge account.  Once the infrastructure for Bridge account has been setup
