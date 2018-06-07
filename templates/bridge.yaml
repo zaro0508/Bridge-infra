@@ -565,12 +565,6 @@ Resources:
       EnableLogFileValidation: true
       IncludeGlobalServiceEvents: true
       IsMultiRegionTrail: true
-  # Cloudformation bucket for CF templates
-  AWSS3CloudformationBucket:
-    Type: "AWS::S3::Bucket"
-    DeletionPolicy: Delete
-    Properties:
-      BucketName: !Sub '${AWS::StackName}-cloudformation-artifacts-${AWS::AccountId}'
   # AWS Config service, https://github.com/awslabs/aws-cloudformation-templates/blob/master/aws/services/Config/Config.yaml
   AWSConfigConfigurationRecorder:
     Type: AWS::Config::ConfigurationRecorder
@@ -826,10 +820,6 @@ Outputs:
     Value: !Ref AWSIAMEnforceMfaPolicy
     Export:
       Name: !Sub '${AWS::StackName}-EnforceMfaPolicy'
-  AWSS3CloudformationBucket:
-    Value: !Ref AWSS3CloudformationBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-CloudformationBucket'
   FhcrcVpnCidrip:
     Value: !Ref FhcrcVpnCidrip
     Export:
