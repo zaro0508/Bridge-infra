@@ -22,9 +22,6 @@ Parameters:
     NoEcho: true
   OperatorEmail:
     Type: String
-  FhcrcVpnCidrip:
-    Type: String
-    NoEcho: true
   VpcPeeringRequesterAwsAccountId:
     Type: String
     NoEcho: true
@@ -820,10 +817,6 @@ Outputs:
     Value: !Ref AWSIAMEnforceMfaPolicy
     Export:
       Name: !Sub '${AWS::StackName}-EnforceMfaPolicy'
-  FhcrcVpnCidrip:
-    Value: !Ref FhcrcVpnCidrip
-    Export:
-      Name: !Sub '${AWS::StackName}-FhcrcVpnCidrip'
   AWSS3AndroidAppBucketWebsiteURL:
     Condition: CreateProdResources
     Value: !GetAtt AWSS3AndroidAppBucket.WebsiteURL
