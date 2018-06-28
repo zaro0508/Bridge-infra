@@ -1,0 +1,14 @@
+template_path: remote-templates/AccountAlertTopics-Template.yaml
+stack_name: AccountAlertTopics
+parameters:
+  pAccountDescription: {{ environment_variable.TRAVIS_BRANCH }}
+  pInitialSubscriberEmail: {{ environment_variable.OperatorEmail_develop }}
+  pEnableSubscriberSMS: "no"
+  pBillingThreshold: "1000"
+  pDeployLambda: "yes"
+  pLambdaFunctionName: "infra-notices"
+  pSlackWebhookURL: 'https://hooks.slack.com/services/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'
+  pSlackChannel: "#infra-notices"
+hooks:
+  before_update:
+    - !cmd "aws --profile {{ var.profile }} s3 cp s3://{{ environment_variable.AdminCentralInfraCfBucket }}/aws-account-automation/master/AccountAlertTopics-Template.yaml ./remote-templates/AccountAlertTopics-Template.yaml"
