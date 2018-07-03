@@ -4,12 +4,12 @@ dependencies:
   - bootstrap
 parameters:
   pAccountDescription: bridge-{{ environment_variable.TRAVIS_BRANCH }}
-  pInitialSubscriberEmail: {{ environment_variable.OperatorEmail_develop }}
+  pInitialSubscriberEmail: {{ environment_variable.OperatorEmail_prod }}
   pEnableSubscriberSMS: "false"
   pBillingThreshold: "1000"
   pDeployLambda: "true"
   pLambdaFunctionName: "infra-notices"
-  pSlackWebhookURL: {{ environment_variable.SlackWebhookUrl_develop }}
+  pSlackWebhookURL: {{ environment_variable.SlackWebhookUrl_prod }}
   pSlackChannel: "#infra-notices"
 hooks:
   before_update:
