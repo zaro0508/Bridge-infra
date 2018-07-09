@@ -9,6 +9,5 @@ parameters:
   NewRelicAccountId: "{{ environment_variable.NewRelicAccountId_prod }}"
   NewRelicExternalId: "{{ environment_variable.NewRelicExternalId_prod }}"
   OperatorEmail: {{ environment_variable.OperatorEmail_prod }}
-  FhcrcVpnCidrip: {{ environment_variable.FhcrcVpnCidrip_prod }}
   VpcPeeringRequesterAwsAccountId: "{{ environment_variable.VpcPeeringRequesterAwsAccountId_prod }}"
 
