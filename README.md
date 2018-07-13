@@ -1,20 +1,19 @@
 # Overview
-Install, configure and manage the Bridge AWS account.
+Install, configure and manage the Bridge Dev and Bridge Prod AWS accounts.
 
 
 ## Create resources
 
 ```
-# unlock repo
-git-crypt unlock
-# set env vars
-source env_vars && source env_vars.secret
-# Run sceptre to create or update CF stacks
+# Update CF stacks with sceptre:
+# sceptre launch-stack prod <stack_name>
 ```
 
-The above should setup resources for the Bridge account.  Once the infrastructure for Bridge account has been setup
-you can access and view the account using the AWS console[1].  When you are satisified with how the account
-is configured you can run BridgePF-infra[2] template to setup BridgePF in the account.
+The above should setup resources for the AWS account.  Once the infrastructure
+for the account has been setup you can access and view the account using the
+[AWS console](https://AWS-account-ID-or-alias.signin.aws.amazon.com/console).
+
+*Note - This project depends on CF templates from other accounts.*
 
 ## Continuous Integration
 We have configured Travis to deploy CF template updates.  Travis deploys using
@@ -29,17 +28,7 @@ We have configured Travis to deploy CF template updates.  Travis deploys using
 * https://travis-ci.org/Sage-Bionetworks/Bridge-infra
 
 ## Secrets
-* We use git-crypt[3] to hide secrets.  Access to secrets is tightly controlled.  You will be required to
-have your own GPG key[4] and you must request access by a maintainer of this project.
-
-
-
-# References
-
-[1] https://AWS-account-ID-or-alias.signin.aws.amazon.com/console
-
-[2] https://github.com/Sage-Bionetworks/Bridge-infra
-
-[3] https://github.com/AGWA/git-crypt
-
-[4] https://help.github.com/articles/generating-a-new-gpg-key
+* We use the [AWS SSM](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)
+to store secrets for this project.  Sceptre retrieves the secrets using
+a [sceptre ssm resolver](https://github.com/cloudreach/sceptre/tree/v1/contrib/ssm-resolver)
+and passes them to the cloudformation stack on deployment.

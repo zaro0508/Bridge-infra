@@ -4,10 +4,9 @@ dependencies:
   - essentials
 parameters:
   AwsAccount: {{ environment_variable.TRAVIS_BRANCH }}
-  AwsDefaultVpcId: "{{ environment_variable.AwsDefaultVpcId_develop }}"
-  InitNewUserPassword: {{ environment_variable.InitNewUserPassword_develop }}
-  NewRelicAccountId: "{{ environment_variable.NewRelicAccountId_develop }}"
-  NewRelicExternalId: "{{ environment_variable.NewRelicExternalId_develop }}"
-  OperatorEmail: {{ environment_variable.OperatorEmail_develop }}
-  VpcPeeringRequesterAwsAccountId: "{{ environment_variable.VpcPeeringRequesterAwsAccountId_develop }}"
-
+  AwsDefaultVpcId: "vpc-f389e98a"
+  InitNewUserPassword: !ssm /infra/InitNewUserPassword
+  NewRelicAccountId: "754728514883"
+  NewRelicExternalId: !ssm /infra/NewRelicExternalId
+  OperatorEmail: bridgeops-develop@sagebase.org
+  VpcPeeringRequesterAwsAccountId: !ssm /infra/VpcPeeringRequesterAwsAccountId
