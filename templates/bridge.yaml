@@ -687,7 +687,7 @@ Resources:
       MetricName: SMSMonthToDateSpentUSD
       Namespace: AWS/SNS
       Period: 300
-      Statistic: Average
+      Statistic: Maximum
       TreatMissingData: notBreaching
   AWSCWSmsDashboard:
     Type: 'AWS::CloudWatch::Dashboard'
