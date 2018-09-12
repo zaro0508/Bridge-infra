@@ -41,7 +41,8 @@ Resources:
     Properties:
       UserName: x.schildwachter@sagebase.org
       Groups:
-        - !Ref AWSIAMPowerUsersGroup
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -50,6 +51,7 @@ Resources:
     Properties:
       UserName: khai.do@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -59,6 +61,7 @@ Resources:
     Properties:
       UserName: alx.dark@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -68,6 +71,7 @@ Resources:
     Properties:
       UserName: dwayne.jeng@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -77,6 +81,7 @@ Resources:
     Properties:
       UserName: erin.mounts@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMiOSDevelopersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -86,6 +91,7 @@ Resources:
     Properties:
       UserName: joshua.liu@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMDeveloperUsersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -95,6 +101,7 @@ Resources:
     Properties:
       UserName: shannon.young@sagebase.org
       Groups:
+        - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMiOSDevelopersGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
@@ -105,16 +112,8 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
-        - !Ref AWSIAMEnforceMfaPolicy
         - !Ref AWSIAMDynamoDenyDeletePolicy
         - !Ref AWSIAMRdsDenyDeletePolicy
-  AWSIAMPowerUsersGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/PowerUserAccess
-        - arn:aws:iam::aws:policy/IAMReadOnlyAccess
-        - !Ref AWSIAMEnforceMfaPolicy
   AWSIAMiOSBucketManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
@@ -151,6 +150,16 @@ Resources:
         # IAM does not support object level permissions for Cloudfront, it's either all or nothing.
         # https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html
         - arn:aws:iam::aws:policy/CloudFrontFullAccess
+  AWSIAMOrganizationsFullAccessPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: "Allow"
+            Action: "organizations:*"
+            Resource: "*"
   AWSIAMAdminRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -209,6 +218,18 @@ Resources:
       Roles:
         -
           !Ref AWSIAMAdminRole
+  AWSIAMAllUsersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - !Ref AWSIAMEnforceMfaPolicy
+  AWSIAMBillingManagersGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - !Ref AWSIAMOrganizationsFullAccessPolicy
   # resources for logging services
   AWSIAMSumoLogicUser:
     Type: 'AWS::IAM::User'
@@ -259,10 +280,6 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - !Ref IAMLoggingServiceManagedPolicy
-
-
-
-
   AWSIAMNewRelicRole:
     Type: "AWS::IAM::Role"
     Properties:
