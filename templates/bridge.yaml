@@ -112,6 +112,8 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
         - arn:aws:iam::aws:policy/IAMReadOnlyAccess
+        - !Ref AWSIAMDynamoDenyDeletePolicy
+        - !Ref AWSIAMRdsDenyDeletePolicy
   AWSIAMiOSBucketManagedPolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
