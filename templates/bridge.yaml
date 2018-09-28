@@ -76,6 +76,16 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMAishwaryaMandyamUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: aishwarya.mandyam@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMErinMountsUser:
     Type: 'AWS::IAM::User'
     Properties:
