@@ -4,7 +4,7 @@ dependencies:
   - bootstrap
 parameters:
   VpcName: BridgeServer2-vpc
-  VpcSubnetPrefix: "172.31"
+  VpcSubnetPrefix: "172.32"
 hooks:
   before_create:
     - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/vpc.yaml --create-dirs -o remote-templates/vpc.yaml"
