@@ -1,0 +1,14 @@
+template_path: remote-templates/peer-route-config.yaml
+stack_name: peer-vpn-BridgeServer2-vpc
+dependencies:
+  - BridgeServer2-vpc
+parameters:
+  PeeringConnectionId: pcx-0779dd51dcc40d00e
+  VpcPublicRouteTable: rtb-03ea8549c4444bf3a
+  VpcPrivateRouteTable: rtb-0e8854efafd1cb53f
+  VpnCidr: 10.1.0.0/16
+hooks:
+  before_create:
+    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/peer-route-config.yaml --create-dirs -o remote-templates/peer-route-config.yaml"
+  before_update:
+    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/peer-route-config.yaml --create-dirs -o remote-templates/peer-route-config.yaml"

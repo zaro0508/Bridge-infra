@@ -1,0 +1,12 @@
+template_path: remote-templates/vpc.yaml
+stack_name: BridgeServer2-vpc
+dependencies:
+  - bootstrap
+parameters:
+  VpcName: BridgeServer2-vpc
+  VpcSubnetPrefix: "172.32"
+hooks:
+  before_create:
+    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/vpc.yaml --create-dirs -o remote-templates/vpc.yaml"
+  before_update:
+    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/vpc.yaml --create-dirs -o remote-templates/vpc.yaml"
