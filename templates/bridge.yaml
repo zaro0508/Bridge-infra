@@ -709,7 +709,7 @@ Resources:
       AlarmActions:
         - !Ref AWSSNSSmsTopic
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      Threshold: 16
+      Threshold: 20
       EvaluationPeriods: 1
       MetricName: SMSMonthToDateSpentUSD
       Namespace: AWS/SNS
