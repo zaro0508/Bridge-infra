@@ -634,7 +634,7 @@ Resources:
       Description: Checks whether AWS CloudTrail is enabled.
       InputParameters:
         # logs and data are in AWS logcentral account
-        S3BucketName: !Ref CentralCloudtrailBucket
+        s3BucketName: !Ref CentralCloudtrailBucket
         snsTopicArn: !Ref AWSSNSCloudtrailTopic
         cloudWatchLogsLogGroupArn: !GetAtt AWSLogsCloudtrailLogGroup.Arn
       Scope: {}
