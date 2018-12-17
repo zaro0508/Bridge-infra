@@ -671,6 +671,10 @@ Resources:
   AWSCWDynamoDashboard:
     Type: 'AWS::CloudWatch::Dashboard'
     Properties:
+      DashboardName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - DynamoDashboard
       DashboardBody: !Join
         - ''
         - - >-
@@ -746,6 +750,10 @@ Resources:
   AWSCWSmsDashboard:
     Type: 'AWS::CloudWatch::Dashboard'
     Properties:
+      DashboardName: !Join
+        - '-'
+        - - !Ref 'AWS::StackName'
+          - SmsDashboard
       DashboardBody: !Join
         - ''
         - - >-
