@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   AwsDefaultVpcId:
     Description: The AWS account's default VPC id
-    Type: String
+    Type: AWS::EC2::VPC::Id
   AwsAccount:
     Type: String
     Default: develop
@@ -500,7 +500,7 @@ Resources:
       Topics:
         - !Ref AWSSNSCloudtrailTopic
       PolicyDocument:
-        Version: "2008-10-17"
+        Version: "2012-10-17"
         Statement:
           -
             Sid: "CloudtrailTopicPolicy"
@@ -545,10 +545,8 @@ Resources:
         - !Ref AWSIAMCloudtrailLogManagedPolicy
   AWSCloudtrailTrail:
     DependsOn:
-      - AWSLogsCloudtrailLogGroup
       - AWSIAMS3CloudtrailBucketPolicy
       - AWSSNSCloudtrailTopicPolicy
-      - AWSIAMCloudtrailLogRole
     Type: "AWS::CloudTrail::Trail"
     Properties:
       CloudWatchLogsLogGroupArn: !GetAtt AWSLogsCloudtrailLogGroup.Arn
@@ -827,13 +825,13 @@ Resources:
         - CidrIp: "10.1.0.0/16"
           FromPort: -1
           ToPort: -1
-          IpProtocol: -1
+          IpProtocol: "-1"
           Description: "Allow all VPN traffic"
       SecurityGroupEgress:
         - CidrIp: "0.0.0.0/0"
           FromPort: -1
           ToPort: -1
-          IpProtocol: -1
+          IpProtocol: "-1"
 Outputs:
   AwsDefaultVpcId:
     Value: !Ref AwsDefaultVpcId
