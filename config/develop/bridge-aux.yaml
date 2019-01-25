@@ -1,10 +1,10 @@
-template_path: remote-templates/vpc.yaml
+template_path: remote/vpc.yaml
 stack_name: bridge-aux
 dependencies:
-  - bridge
+  - develop/bridge.yaml
 parameters:
   VpcSubnetPrefix: "172.51"
   VpcName: bridge-aux
 hooks:
   before_update:
-    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/vpc.yaml --create-dirs -o remote-templates/vpc.yaml"
+    - !cmd "curl https://s3.amazonaws.com/{{stack_group_config.admincentral_cf_bucket}}/aws-infra/master/vpc.yaml --create-dirs -o templates/remote/vpc.yaml"

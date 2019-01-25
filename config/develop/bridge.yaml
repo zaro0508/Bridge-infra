@@ -1,7 +1,7 @@
-template_path: templates/bridge.yaml
+template_path: bridge.yaml
 stack_name: bridge
 dependencies:
-  - essentials
+  - develop/essentials.yaml
 parameters:
   AwsAccount: {{ environment_variable.TRAVIS_BRANCH }}
   AwsDefaultVpcId: "vpc-f389e98a"
