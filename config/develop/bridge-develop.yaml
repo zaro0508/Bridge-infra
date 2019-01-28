@@ -1,7 +1,7 @@
-template_path: templates/aws-default-vpc.yaml
+template_path: aws-default-vpc.yaml
 stack_name: vpc-bridge-develop
 dependencies:
-  - bridge
+  - develop/bridge.yaml
 parameters:
   VpcSubnetPrefix: "172.47"
   VpcName: bridge-develop
