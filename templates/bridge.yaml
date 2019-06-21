@@ -110,6 +110,16 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMSierraWang:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: sierra.wang@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMDeveloperUsersGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMAaronHaydenUser:
     Type: 'AWS::IAM::User'
     Properties:
