@@ -130,7 +130,7 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
-   AWSIAMJanaeChanUser:
+  AWSIAMJanaeChanUser:
     Type: 'AWS::IAM::User'
     Properties:
       UserName: janae.chan@sagebase.org
