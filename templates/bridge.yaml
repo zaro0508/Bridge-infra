@@ -478,6 +478,11 @@ Resources:
       LogGroupName: !Sub '/aws/cloudtrail/${AWS::StackName}.log'
       RetentionInDays: 90
   AWSS3CloudtrailBucket:
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+          - W3011
     DeletionPolicy: Retain
     Type: "AWS::S3::Bucket"
     Properties: {}
@@ -803,6 +808,11 @@ Resources:
             "region":"us-east-1", "title":"DirectPublishToPhoneNumberFailure"}}]}
   # S3 bucket for android apps
   AWSS3AndroidAppBucket:
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+          - W3011
     Type: AWS::S3::Bucket
     Condition: CreateProdResources
     Properties:
