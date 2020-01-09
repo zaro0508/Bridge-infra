@@ -19,7 +19,7 @@ stages:
 jobs:
   include:
     - stage: validate
-      script: cfn-lint ./templates/**/*
+      script: cfn-lint ./templates/**/*.yaml
     - stage: deploy
       script: sceptre launch $TRAVIS_BRANCH --yes
 
