@@ -1,0 +1,41 @@
+Description: Resources for Jumpcloud IDP
+AWSTemplateFormatVersion: 2010-09-09
+Parameters:
+  BridgeprodAdminMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud AWS app"
+Resources:
+  BridgeprodAdminSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "bridgeprod-admin"
+      Metadata: !Ref BridgeprodAdminMetadata
+      URL: ""
+  BridgeprodAdminSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt BridgeprodAdminSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref BridgeprodAdminSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
+Outputs:
+  BridgeprodAdminSamlProviderArn:
+    Value: !Ref BridgeprodAdminSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgeprodAdminSamlProviderArn'
+  BridgeprodAdminSamlProviderRoleArn:
+    Value: !GetAtt BridgeprodAdminSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgeprodAdminSamlProviderRoleArn'
