@@ -11,9 +11,6 @@ Parameters:
       - prod
       - develop
     ConstraintDescription: must specify develop or prod.
-  InitNewUserPassword:
-    Type: String
-    NoEcho: true
   NewRelicAccountId:
     Type: String
     NoEcho: true
