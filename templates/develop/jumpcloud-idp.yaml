@@ -4,6 +4,9 @@ Parameters:
   BridgedevAdminMetadata:
     Type: String
     Description: "Public certificate for Jumpcloud AWS bridgedev-admin app"
+  BridgedevDeveloperMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud AWS bridgedev-developer app"
   BridgedeviOSDeveloperMetadata:
     Type: String
     Description: "Public certificate for Jumpcloud AWS bridgedev-ios-developer app"
@@ -33,6 +36,31 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
+  BridgedevDeveloperSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "bridgedev-developer"
+      Metadata: !Ref BridgedevDeveloperMetadata
+      URL: ""
+  BridgedevDeveloperSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt BridgedevDeveloperSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/PowerUserAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref BridgedevDeveloperSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
   BridgedeviOSDeveloperSamlProvider:
     Type: Custom::SAMLProvider
     Properties:
@@ -47,7 +75,7 @@ Resources:
       MaxSessionDuration: 28800
       RoleName: !GetAtt BridgedeviOSDeveloperSamlProvider.Name
       ManagedPolicyArns:
-        - 'Fn::ImportValue': !Sub '${AWS::Region}-iam-policies-CfnDeployerServiceManagedPolicyArn'
+        - 'Fn::ImportValue': !Sub '${AWS::Region}-iam-policies-iOSBucketManagedPolicyArn'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -67,6 +95,14 @@ Outputs:
     Value: !GetAtt BridgedevAdminSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedevAdminSamlProviderRoleArn'
+  BridgedevDeveloperSamlProviderArn:
+    Value: !Ref BridgedevDeveloperSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedevDeveloperSamlProviderArn'
+  BridgedevDeveloperSamlProviderRoleArn:
+    Value: !GetAtt BridgedevDeveloperSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedevDeveloperSamlProviderRoleArn'
   BridgedeviOSDeveloperSamlProviderArn:
     Value: !Ref BridgedeviOSDeveloperSamlProvider
     Export:
