@@ -356,7 +356,7 @@ Outputs:
         !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'PublicRouteTable']]
   VpcDefaultSecurityGroup:
     Description: "VPC DefaultSecurityGroup Id"
-    Value: { "Fn::GetAtt" : ["VPC", "DefaultSecurityGroup"] }
+    Value: {"Fn::GetAtt": ["VPC", "DefaultSecurityGroup"]}
     Export:
       Name:
         !Join ['-', [!Ref 'AWS::Region', !Sub '${AWS::StackName}', 'VpcDefaultSecurityGroup']]

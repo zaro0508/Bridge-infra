@@ -20,6 +20,22 @@ We have configured Travis to deploy CF template updates.  Travis deploys using
 [sceptre](https://sceptre.cloudreach.com/latest/about.html)
 
 # Contributions
+Contributions are welcome
+
+Requirements:
+* Install [pre-commit](https://pre-commit.com/#install) app
+* Clone this repo
+* Run `pre-commit install` to install the git hook.
+
+## Testing
+As a pre-deployment step we syntatically validate our sceptre and
+cloudformation yaml files with [pre-commit](https://pre-commit.com).
+
+Please install pre-commit, once installed the file validations will
+automatically run on every commit.  Alternatively you can manually
+execute the validations by running `pre-commit run --all-files`.
+Please install pre-commit, once installed the file validations will
+automatically run on every commit.
 
 ## Issues
 * https://sagebionetworks.jira.com/projects/BRIDGE
