@@ -5,7 +5,6 @@ dependencies:
 parameters:
   AwsAccount: {{ environment_variable.TRAVIS_BRANCH }}
   AwsDefaultVpcId: "vpc-f389e98a"
-  InitNewUserPassword: !ssm /infra/InitNewUserPassword
   NewRelicAccountId: "754728514883"
   NewRelicExternalId: !ssm /infra/NewRelicExternalId
   OperatorEmail: bridgeops-develop@sagebase.org
