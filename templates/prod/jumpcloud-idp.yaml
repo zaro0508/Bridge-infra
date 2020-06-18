@@ -10,6 +10,9 @@ Parameters:
   BridgeprodiOSDeveloperMetadata:
     Type: String
     Description: "Public certificate for Jumpcloud AWS bridgeprod-ios-developer app"
+  BridgeprodInternMetadata:
+    Type: String
+    Description: "Public certificate for Jumpcloud AWS bridgeprod-intern app"
 Resources:
   BridgeprodAdminSamlProvider:
     Type: Custom::SAMLProvider
@@ -86,6 +89,31 @@ Resources:
             Condition:
               StringEquals:
                 "SAML:aud": "https://signin.aws.amazon.com/saml"
+  BridgeprodInternSamlProvider:
+    Type: Custom::SAMLProvider
+    Properties:
+      ServiceToken: !ImportValue
+        'Fn::Sub': '${AWS::Region}-cfn-cr-saml-provider-FunctionArn'
+      Name: "bridgeprod-intern"
+      Metadata: !Ref BridgeprodInternMetadata
+      URL: ""
+  BridgeprodInternSamlProviderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      MaxSessionDuration: 28800
+      RoleName: !GetAtt BridgeprodInternSamlProvider.Name
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref BridgeprodInternSamlProvider
+            Action: sts:AssumeRoleWithSAML
+            Condition:
+              StringEquals:
+                "SAML:aud": "https://signin.aws.amazon.com/saml"
 Outputs:
   BridgeprodAdminSamlProviderArn:
     Value: !Ref BridgeprodAdminSamlProvider
@@ -109,5 +137,13 @@ Outputs:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderArn'
   BridgedprodiOSDeveloperSamlProviderRoleArn:
     Value: !GetAtt BridgedprodiOSDeveloperSamlProviderRole.Arn
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderRoleArn'
+  BridgedprodInternSamlProviderArn:
+    Value: !Ref BridgeprodInternSamlProvider
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderArn'
+  BridgedprodInternSamlProviderRoleArn:
+    Value: !GetAtt BridgeprodInternSamlProvider.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderRoleArn'
