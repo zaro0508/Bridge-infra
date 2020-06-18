@@ -103,7 +103,7 @@ Resources:
       MaxSessionDuration: 28800
       RoleName: !GetAtt BridgeprodInternSamlProvider.Name
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
