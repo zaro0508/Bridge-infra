@@ -139,11 +139,11 @@ Outputs:
     Value: !GetAtt BridgedprodiOSDeveloperSamlProviderRole.Arn
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderRoleArn'
-  BridgedprodInternSamlProviderArn:
+  BridgeprodInternSamlProviderArn:
     Value: !Ref BridgeprodInternSamlProvider
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderArn'
-  BridgedprodInternSamlProviderRoleArn:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgeprodInternSamlProviderArn'
+  BridgeprodInternSamlProviderRoleArn:
     Value: !GetAtt BridgeprodInternSamlProvider.Arn
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgedprodiOSDeveloperSamlProviderRoleArn'
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-BridgeprodInternSamlProviderRoleArn'
