@@ -51,6 +51,8 @@ Resources:
       RoleName: !GetAtt BridgeprodDeveloperSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
+        - 'Fn::ImportValue': !Sub '${AWS::Region}-iam-policies-DynamoDenyDeletePolicyArn'
+        - 'Fn::ImportValue': !Sub '${AWS::Region}-iam-policies-RdsDenyDeletePolicyArn'
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
