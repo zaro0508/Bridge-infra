@@ -27,8 +27,43 @@ Resources:
               - 's3:DeleteObject'
             Effect: Allow
             Resource: "arn:aws:s3:::ios-apps.sagebridge.org/*"
+  DynamoDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              # UpdateTable operation retricts deletion of indexes
+              - dynamodb:UpdateTable
+              - dynamodb:DeleteTable
+            Resource: "*"
+  RdsDenyDeletePolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          -
+            Effect: Deny
+            Action:
+              - rds:DeleteDBCluster
+              - rds:DeleteDBClusterSnapshot
+              - rds:DeleteDBInstance
+              - rds:DeleteDBSnapshot
+            Resource: "*"
 Outputs:
   iOSBucketManagedPolicyArn:
     Value: !Ref iOSBucketManagedPolicy
     Export:
       Name: !Sub '${AWS::Region}-${AWS::StackName}-iOSBucketManagedPolicyArn'
+  DynamoDenyDeletePolicyArn:
+    Value: !Ref DynamoDenyDeletePolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-DynamoDenyDeletePolicyArn'
+  RdsDenyDeletePolicyArn:
+    Value: !Ref iOSBucketManagedPolicy
+    Export:
+      Name: !Sub '${AWS::Region}-${AWS::StackName}-RdsDenyDeletePolicyArn'
