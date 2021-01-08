@@ -51,6 +51,13 @@ Resources:
       RoleName: !GetAtt BridgedevDeveloperSamlProvider.Name
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+        - arn:aws:iam::aws:policy/AmazonElastiCacheFullAccess
+        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonSESFullAccess
+        - arn:aws:iam::aws:policy/AmazonSNSFullAccess
+        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
